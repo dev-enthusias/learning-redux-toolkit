@@ -2,6 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   value: 0,
+  loading: false,
 };
 
 const counterSlice = createSlice({
@@ -17,6 +18,16 @@ const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(incrementAsync.pending, state => {
+        state.loading = true;
+      })
+      .addCase(incrementAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.value += action.payload;
+      });
   },
 });
 
